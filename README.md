@@ -101,8 +101,8 @@ Management access restricted to MANAGE_NETS alias (192.168.1.0/24).
 - Implemented Suricata IDS/IPS on dedicated Raspberry Pi 5 with 65,796 detection rules
 - Deployed Wazuh XDR across Windows and Linux endpoints with FIM and malware detection
 - Built complete ELK Stack processing 300,000+ Suricata events and 140,000+ pfSense logs
-- Created three professional Kibana dashboards for network, endpoint, and executive monitoring
-- Validated five attack types with real-time detection in Kibana
+- Created two professional Kibana dashboards for network, endpoint
+
 
 ---
 
