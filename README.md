@@ -17,15 +17,15 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM.
 
-### Suricata IDS/IPS (Raspberry Pi 5)
+### Suricata IDS/IPS (Docker Container on Raspberry Pi 5)
 
 Runs as a dedicated network security sensor on Raspberry Pi 5 hardware. Loads 65,796 detection rules including malware C2, port scanning, exploit detection, and web attack signatures. Provides real-time intrusion detection and traffic analysis on the network edge.
 
-### Wazuh XDR (Ubuntu VM - SOC Controller)
+### Wazuh XDR (Docker Container on Ubuntu VM - SOC Controller)
 
 Acts as a centralized Extended Detection and Response platform for endpoint security. Collects telemetry from Windows 10, Windows Domain Controller, Red Hat Linux, and K8s Node agents. Provides file integrity monitoring, malware detection, rootkit detection, and MITRE ATT&CK mapping for security events.
 
-### ELK Stack (Ubuntu VM - SOC Controller)
+### ELK Stack (Docker Container on Ubuntu VM - SOC Controller)
 
 Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash receives syslog from pfSense firewalls on port 5140 and parses CSV fields. Elasticsearch indexes 300,000+ Suricata events and 140,000+ pfSense logs. Kibana provides real-time security dashboards for threat visualization and incident investigation.
 
