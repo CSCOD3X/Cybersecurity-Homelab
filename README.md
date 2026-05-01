@@ -8,6 +8,9 @@ The SOC Homelab project implements a complete enterprise-grade Security Operatio
 
 ---
 
+<img width="4829" height="2327" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/ad3bbbb8-2b9f-4f2f-8429-d33a281ee5ec" />
+
+
 ## Components and Their Purposes
 
 ### pfSense Firewalls (Virtual Machines - Site A & Site B)
