@@ -4,7 +4,7 @@ Security Monitoring Platform
 
 ## Overview
 
-The SOC Homelab project implements a complete enterprise-grade Security Operations Center platform for security monitoring, threat detection, and incident response. The lab simulates a multi-site enterprise environment with network segmentation, centralized logging, intrusion detection, and endpoint security, providing hands-on experience with professional security tools and workflows.
+The Homelab project implements a complete Security Operations Center platform for security monitoring, threat detection. The lab simulates a multi-site enterprise environment with network segmentation, centralized logging, intrusion detection, and endpoint security, providing hands-on experience with professional security tools and workflows.
 
 ---
 
