@@ -75,11 +75,9 @@ The lab consists of two pfSense firewalls connected via IPsec site-to-site VPN. 
 
 **SSH Brute Force:** Hydra and repeated failed SSH attempts triggered Wazuh multiple failed login alerts and pfSense NAT access logs.
 
-**Web Directory Scan:** Gobuster enumeration triggered Suricata suspicious User-Agent alerts.
-
-**EICAR Malware Simulation:** EICAR test file transfer triggered Wazuh malware signature detection.
-
 **Ping Flood:** ICMP flood triggered pfSense DoS pattern detection logs.
+
+**SMB enumeration using enum4linux:** Detected scans on nas storage.
 
 ---
 
