@@ -37,6 +37,9 @@ Provides service health monitoring for all SOC infrastructure components. Tracks
 
 Enables secure remote access to the entire lab environment from outside locations. Provides encrypted tunnel without complex firewall configuration.
 
+### NAS Storage (samba)
+The NAS storage serves as the central backup and file storage location for pfSense configuration backups, Kibana dashboard exports, and long-term log archive retention from Elasticsearch.
+
 ### Kali Linux (Attack Machine)
 
 Serves as the dedicated attack machine for penetration testing and detection validation. Used to simulate real-world attacks including port scans, SSH brute force, web directory enumeration, and DoS attacks to validate SOC detection capabilities.
