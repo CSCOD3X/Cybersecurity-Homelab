@@ -8,7 +8,8 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="4829" height="2327" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/ad3bbbb8-2b9f-4f2f-8429-d33a281ee5ec" />
+<img width="4829" height="2327" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/f8a8c377-5b60-4647-93c9-cd1cdd36602e" />
+
 
 
 ## Components and Their Purposes
@@ -39,6 +40,9 @@ Enables secure remote access to the entire lab environment from outside location
 
 ### NAS Storage (samba)
 The NAS storage serves as the central backup and file storage location for pfSense configuration backups, Kibana dashboard exports, and long-term log archive retention from Elasticsearch.
+
+### Pi-hole (DNS Sinkhole)
+Pi-hole is deployed on the same Raspberry Pi 5 security sensor, providing DNS-level threat intelligence and ad blocking.
 
 ### Kali Linux (Attack Machine)
 
