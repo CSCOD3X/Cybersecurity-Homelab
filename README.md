@@ -8,7 +8,8 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="4829" height="2327" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/f8a8c377-5b60-4647-93c9-cd1cdd36602e" />
+<img width="4829" height="2787" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/5b44d1e7-188d-4551-b93f-e2ad8599e0a8" />
+
 
 
 
