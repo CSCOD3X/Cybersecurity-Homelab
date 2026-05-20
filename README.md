@@ -1,5 +1,5 @@
 # Cybersecurity-Homelab
-**Security Monitoring Platform**
+
 
 
 ## Overview
