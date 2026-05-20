@@ -1,5 +1,5 @@
 # Cybersecurity-Homelab
-Security Monitoring Platform
+**Security Monitoring Platform**
 
 
 ## Overview
@@ -8,7 +8,8 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="4829" height="2787" alt="Network_homelab_architecture" src="https://github.com/user-attachments/assets/5b44d1e7-188d-4551-b93f-e2ad8599e0a8" />
+<img width="4591" height="3350" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/c26e103b-5694-4024-be5a-cb5d8325ca3d" />
+
 
 
 
@@ -21,15 +22,15 @@ Serve as enterprise-grade network security appliances providing advanced firewal
 
 ### Suricata IDS/IPS (Docker Container on Raspberry Pi 5)
 
-Runs as a dedicated network security sensor on Raspberry Pi 5 hardware. Loads 65,796 detection rules including malware C2, port scanning, exploit detection, and web attack signatures. Provides real-time intrusion detection and traffic analysis on the network edge.
+Runs as a dedicated network security sensor on Raspberry Pi 5 hardware. Loads **65,796 detection rules** including malware C2, port scanning, exploit detection, and web attack signatures. Provides real-time intrusion detection and traffic analysis on the network edge.
 
 ### Wazuh XDR (Docker Container on Ubuntu VM - SOC Controller)
 
-Acts as a centralized Extended Detection and Response platform for endpoint security. Collects telemetry from Windows 10, Windows Domain Controller, Red Hat Linux, and K8s Node agents. Provides file integrity monitoring, malware detection, rootkit detection, and MITRE ATT&CK mapping for security events.
+Acts as a centralized Extended Detection and Response platform for endpoint security. Collects telemetry from Windows 10, Windows Domain Controller, Red Hat Linux, and K8s Node agents. Provides file integrity monitoring, malware detection, rootkit detection, and **MITRE ATT&CK mapping** for security events.
 
 ### ELK Stack (Docker Container on Ubuntu VM - SOC Controller)
 
-Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash receives syslog from pfSense firewalls on port 5140 and parses CSV fields. Elasticsearch indexes 300,000+ Suricata events and 140,000+ pfSense logs. Kibana provides real-time security dashboards for threat visualization and incident investigation.
+Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash receives syslog from pfSense firewalls on port 5140 and parses CSV fields. Elasticsearch indexes **300,000+ Suricata events** and **140,000+ pfSense logs**. Kibana provides real-time security dashboards for threat visualization and incident investigation.
 
 ### Uptime Kuma (Docker Container on Ubuntu VM)
 
@@ -40,9 +41,11 @@ Provides service health monitoring for all SOC infrastructure components. Tracks
 Enables secure remote access to the entire lab environment from outside locations. Provides encrypted tunnel without complex firewall configuration.
 
 ### NAS Storage (samba)
+
 The NAS storage serves as the central backup and file storage location for pfSense configuration backups, Kibana dashboard exports, and long-term log archive retention from Elasticsearch.
 
 ### Pi-hole (DNS Sinkhole)
+
 Pi-hole is deployed on the same Raspberry Pi 5 security sensor, providing DNS-level threat intelligence and ad blocking.
 
 ### Kali Linux (Attack Machine)
@@ -63,7 +66,7 @@ Serves as the dedicated attack machine for penetration testing and detection val
 
 ## Architecture Overview
 
-The lab consists of two pfSense firewalls connected via IPsec site-to-site VPN. Site A manages internal network 10.0.2.0/24 hosting Windows workloads. Site B manages internal network 10.0.3.0/24 hosting Linux workloads. A Raspberry Pi 5 runs Suricata IDS monitoring network traffic. An Ubuntu VM serves as the SOC controller running Elasticsearch, Kibana, Logstash, Wazuh Manager, and Uptime Kuma. All pfSense logs are sent via syslog to Logstash on port 5140. Suricata logs are shipped via Filebeat to Elasticsearch. Wazuh agents send telemetry to the Wazuh Manager, which forwards alerts to Elasticsearch. Kibana provides unified visualization across all data sources.
+The lab consists of two pfSense firewalls connected via IPsec site-to-site VPN. Site A manages internal network **10.0.2.0/24** hosting Windows workloads. Site B manages internal network **10.0.3.0/24** hosting Linux workloads. A Raspberry Pi 5 runs Suricata IDS monitoring network traffic. An Ubuntu VM serves as the SOC controller running Elasticsearch, Kibana, Logstash, Wazuh Manager, and Uptime Kuma. All pfSense logs are sent via syslog to Logstash on port **5140**. Suricata logs are shipped via Filebeat to Elasticsearch. Wazuh agents send telemetry to the Wazuh Manager, which forwards alerts to Elasticsearch. Kibana provides unified visualization across all data sources.
 
 ---
 
@@ -79,7 +82,7 @@ The lab consists of two pfSense firewalls connected via IPsec site-to-site VPN. 
 
 ## Attack Simulations Validated
 
-**Port Scan:** Nmap scan against pfSense WAN interface triggered Suricata "ET SCAN Nmap" alert with 4,180+ hits in Kibana.
+**Port Scan:** Nmap scan against pfSense WAN interface triggered Suricata "ET SCAN Nmap" alert with **4,180+ hits** in Kibana.
 
 **SSH Brute Force:** Hydra and repeated failed SSH attempts triggered Wazuh multiple failed login alerts and pfSense NAT access logs.
 
@@ -95,19 +98,28 @@ The lab consists of two pfSense firewalls connected via IPsec site-to-site VPN. 
 - **Uptime Kuma:** http://192.168.1.55:3001
 - **pfSense-1 GUI:** https://192.168.1.40:8443
 - **pfSense-2 GUI:** https://192.168.1.41:8443
+- **Pi-hole GUI:** http://192.168.1.39:80
 
-Management access restricted to MANAGE_NETS alias (192.168.1.0/24).
+Management access restricted to **MANAGE_NETS** alias (192.168.1.0/24).
 
 ---
 
 ## Key Achievements
 
 - Deployed dual pfSense firewalls with site-to-site IPsec VPN and network segmentation
-- Implemented Suricata IDS/IPS on dedicated Raspberry Pi 5 with 65,796 detection rules
+- Implemented Suricata IDS/IPS on dedicated Raspberry Pi 5 with **65,796 detection rules**
 - Deployed Wazuh XDR across Windows and Linux endpoints with FIM and malware detection
-- Built complete ELK Stack processing 300,000+ Suricata events and 140,000+ pfSense logs
+- Built complete ELK Stack processing **300,000+ Suricata events** and **140,000+ pfSense logs**
 - Created two professional Kibana dashboards for network, endpoint
+- Validated **4 attack types** (port scan, SSH brute force, DoS, SMB enumeration) with full detection coverage
 
+---
+
+## Planned Improvements
+
+- **Shuffle SOAR:** Automated incident response playbooks triggered by Wazuh alerts
+- **SANS SIFT Workstation:** Digital forensics analysis for post-incident investigation
+- **Azure AD Connect:** Hybrid identity management with on-premises Active Directory
 
 ---
 
