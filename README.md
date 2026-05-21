@@ -115,7 +115,7 @@ Management access restricted to **MANAGE_NETS** alias (192.168.1.0/24).
 
 ---
 
-## Planned Improvements
+## upcoming enhancements:
 
 - **Shuffle SOAR:** Automated incident response playbooks triggered by Wazuh alerts
 - **SANS SIFT Workstation:** Digital forensics analysis for post-incident investigation
