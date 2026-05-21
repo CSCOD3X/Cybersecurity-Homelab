@@ -7,8 +7,8 @@
 The Homelab project implements a complete Security Operations Center platform for security monitoring, threat detection. The lab simulates a multi-site enterprise environment with network segmentation, centralized logging, intrusion detection, and endpoint security, providing hands-on experience with professional security tools and workflows.
 
 ---
+<img width="4778" height="3384" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/dce4785b-7aea-45c1-a0e3-589ea2179557" />
 
-<img width="4591" height="3350" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/c26e103b-5694-4024-be5a-cb5d8325ca3d" />
 
 
 
@@ -120,6 +120,7 @@ Management access restricted to **MANAGE_NETS** alias (192.168.1.0/24).
 - **Shuffle SOAR:** Automated incident response playbooks triggered by Wazuh alerts
 - **SANS SIFT Workstation:** Digital forensics analysis for post-incident investigation
 - **Azure AD Connect:** Hybrid identity management with on-premises Active Directory
+- **DMZ:** Vulnerable internal network used for penetration testing 
 
 ---
 
