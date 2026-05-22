@@ -64,6 +64,8 @@ Hosts a standalone public cloud **T-Pot Honeypot Framework** out-of-band. Captur
 
 Serves as the dedicated attack machine for penetration testing and detection validation. Used to simulate real-world attacks including port scans, SSH brute force, web directory enumeration, and DoS attacks to validate SOC detection capabilities.
 
+**SANS SIFT Workstation:** Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations.
+
 ### Internal Endpoints
 
 **Windows 10 VM:** Provides Windows-based endpoint for monitoring testing and client-side attack simulation.
@@ -74,7 +76,6 @@ Serves as the dedicated attack machine for penetration testing and detection val
 
 **K8s Node:** Provides container host environment for Kubernetes security monitoring practice.
 
-**SANS SIFT Workstation:** Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations.
 
 ---
 
