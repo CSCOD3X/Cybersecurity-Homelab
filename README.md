@@ -12,7 +12,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ## Components and Their Purposes
 
-### Palo Alto VM-Series (Virtual Machine - PC 1 ThinkPad Laptop)
+### Palo Alto VM-Series (Virtual Machine - PC 1 Laptop)
 
 Serves as the perimeter edge next-generation firewall (NGFW) managing the high-risk segments including the Attacker Network, the DMZ, and Internal Network-1. Generates rich Layer 7 App-ID, Threat Prevention, and SSL Decryption telemetry logs natively streamed over the network to the central SIEM ingestion pipeline.
 
