@@ -64,7 +64,8 @@ Hosts a standalone public cloud **T-Pot Honeypot Framework** out-of-band. Captur
 
 Serves as the dedicated attack machine for penetration testing and detection validation. Used to simulate real-world attacks including port scans, SSH brute force, web directory enumeration, and DoS attacks to validate SOC detection capabilities.
 
-**SANS SIFT Workstation:** Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations.
+### SANS SIFT Workstation (DFIR vm)
+Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations.
 
 ### Internal Endpoints
 
