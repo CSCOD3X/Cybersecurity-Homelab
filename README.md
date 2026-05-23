@@ -1,5 +1,8 @@
 # Cybersecurity-Homelab
+![Status](https://img.shields.io/badge/Status-Under%20Development-orange)
+![Last Updated](https://img.shields.io/badge/Updated-May%202026-blue)
 
+> This is a continuous learning project
 ## Overview
 
 The Homelab project implements a complete Security Operations Center platform for security monitoring, threat detection. The lab simulates a multi-site enterprise environment with network segmentation, centralized logging, intrusion detection, and endpoint security, providing hands-on experience with professional security tools and workflows.
