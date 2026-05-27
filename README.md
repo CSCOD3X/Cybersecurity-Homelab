@@ -9,20 +9,17 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="8118" height="8928" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/54d43d57-0012-4b54-8a12-061be725756f" />
+<img width="8037" height="9050" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/4d34923c-d9fc-40e2-8f35-967bb14f7947" />
+
 
 
 ---
 
 ## Components and Their Purposes
 
-### Palo Alto VM-Series (Virtual Machine - PC 1 Laptop)
+### pfSense Firewalls (Virtual Machines - Site A & Site B)
 
-Serves as the perimeter edge next-generation firewall (NGFW) managing the high-risk segments including the Attacker Network, the DMZ, and Internal Network-1. Generates rich Layer 7 App-ID, Threat Prevention, and SSL Decryption telemetry logs natively streamed over the network to the central SIEM ingestion pipeline.
-
-### FortiGate-VM01 (Virtual Machine - PC 2 Desktop Tower)
-
-Secures the simulated corporate environment ring on the secondary host. Manages Internal Network-2 boundary rules and directly terminates the cross-vendor IPsec Site-to-Site VPN tunnel linking back to the Palo Alto edge core.
+Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM.
 
 ### Physical Cisco Catalyst Switch Stack (2960-CX & 3560-CX Compact Hardware)
 
@@ -86,7 +83,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (64GB ThinkPad Laptop) runs VirtualBox to host the Palo Alto VM, Kali Linux, and the heavy central ELK/Wazuh SIEM stack. PC 2 (32GB Desktop Tower) splits resources by running a bare-metal VMware ESXi 8.0 hypervisor dedicated strictly to your TrueNAS SAN array, while running VirtualBox on the base desktop OS to host the FortiGate VM, Windows DC, and client endpoints. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: Management and Azure cloud identity syncing route over **VLAN 99 (MTU 1500)**, while TrueNAS shares raw block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** with blank default gateways directly to the Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (64GB ThinkPad Laptop) runs VirtualBox to host the Pfsense-1 VM, Kali Linux, and the heavy central ELK/Wazuh SIEM stack. PC 2 (32GB Desktop Tower) splits resources by running a bare-metal VMware ESXi 8.0 hypervisor dedicated strictly to your TrueNAS SAN array, while running VirtualBox on the base desktop OS to host the Pfsense-2 VM, Windows DC, and client endpoints. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: Management and Azure cloud identity syncing route over **VLAN 99 (MTU 1500)**, while TrueNAS shares raw block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** with blank default gateways directly to the Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -133,9 +130,9 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Shuffle SOAR:** https://soar.duckdns.org:3002
 
-**Palo Alto VM GUI:** https://192.168.1.40:8443
+**Pfsense-1 VM GUI:** https://192.168.1.40:8443
 
-**FortiGate VM GUI:** https://192.168.1.41:8443
+**Pfsesne-2 VM GUI:** https://192.168.1.41:8443
 
 **Pi-hole GUI:** http://192.168.1.39:80
 
