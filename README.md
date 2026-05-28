@@ -56,6 +56,9 @@ Enables secure remote access to the entire lab environment from outside location
 
 Deployed on the same Raspberry Pi 5 security sensor, providing DNS-level threat intelligence and query log forwarding to Logstash while acting as a DNS sinkhole to drop outbound malware C2 domains.
 
+### n8n Automation Platform (Docker Container on Ubuntu VM)
+Provides workflow automation and integration across SOC services. Acts as a low-code orchestration engine to connect Suricata, Wazuh, ELK, Shuffle SOAR, and external APIs. Enables automated enrichment of alerts (e.g., querying VirusTotal, WHOIS, or threat intel feeds), ticket creation in Jira, and notification routing to email/Slack. Simplifies repetitive SOC tasks by chaining triggers and actions into visual workflows, reducing manual analyst workload and accelerating incident response.
+
 ### Linode Cloud VPS (Public Cloud Debian Instance)
 
 Hosts a standalone public cloud **T-Pot Honeypot Framework** out-of-band. Captures real-world internet attacker botnets, brute-force payloads, and malicious IPs safely away from the home infrastructure, shipping raw threat intelligence telemetry back to the local Logstash container over TLS.
