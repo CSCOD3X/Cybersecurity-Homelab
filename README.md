@@ -48,9 +48,9 @@ Provides automated incident response and orchestration. Intercepts high-severity
 
 Provides service health monitoring for all SOC infrastructure components. Tracks uptime, response times, and sends alerts when services become unavailable.
 
-### Tailscale VPN & DuckDNS Integration
+### Tailscale VPN
 
-Enables secure remote access to the entire lab environment from outside locations. Implements a WireGuard mesh network alongside DuckDNS dynamic public IP tracking on the Raspberry Pi 5, leveraging a Let's Encrypt Split-DNS proxy to enforce fully trusted SSL/HTTPS padlocks on all web management portals without opening risky router ports.
+Enables secure remote access to the entire lab environment from outside locations.
 
 ### Pi-hole (DNS Sinkhole)
 
