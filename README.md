@@ -9,7 +9,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7795" height="9414" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/3150cbcb-65fc-441f-bff2-f9120576195a" />
+<img width="7795" height="9333" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/c3d0fa54-b9b0-4185-8300-5e901a161f2a" />
 
 
 ---
@@ -18,7 +18,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ### pfSense Firewalls (Virtual Machines - Site A & Site B)
 
-Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM.
+Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added snort IDS/IPS for internal network traffic detection and blocking suspicous traffic from the attacker.
 
 ### Physical Cisco Catalyst Switch Stack (2960-CX & 3560-CX Compact Hardware)
 
