@@ -138,17 +138,6 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Pi-hole GUI:** http://192.168.1.39:80
 
-**T-Pot WebUI:** https://linode-ip:64295
-
-**TrueNAS Core GUI:** https://192.168.88.10
-
-**Proxmox GUI:** https://192.168.88.2
-
-**Cisco Switch CLI:** SSH to 192.168.99.2
-
-
-Management access restricted to Management VLAN 99 (192.168.99.0/24) and Tailscale authorized users.
-
 ---
 
 ## Upcoming Enhancements
