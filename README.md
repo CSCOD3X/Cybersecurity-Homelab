@@ -9,7 +9,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7795" height="9333" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/c3d0fa54-b9b0-4185-8300-5e901a161f2a" />
+<img width="7956" height="9414" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/ad56aa74-d312-4305-88df-17722eb71378" />
 
 
 ---
@@ -24,7 +24,7 @@ Serve as enterprise-grade network security appliances providing advanced firewal
 
 Acts as the high-speed physical network backplane across the desk. The 2960-CX Layer 2 switch aggregates physical PC hosts and trunks VLAN tags over a 2-cable LACP EtherChannel bundle to the 3560-CX Layer 3 Core switch, which processes hardware-level inter-VLAN routing and mirrors packet fragments via a SPAN port.
 
-### TrueNAS Core IP SAN (Virtual Machine - VMware ESXi 8.0 on PC 2)
+### TrueNAS Core IP SAN (Virtual Machine - Proxmox on Dell Optiplex)
 
 Operates on a dedicated bare-metal hypervisor node to serve as an enterprise-grade block-storage SAN appliance. Passes through a physical 4TB external hard drive to carve out separate low-latency iSCSI LUN block allocations over a completely isolated, un-routed Storage Fabric (VLAN 88, Jumbo MTU 9000).
 
@@ -85,7 +85,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (64GB ThinkPad Laptop) runs VirtualBox to host the Pfsense-1 VM, Kali Linux, and the heavy central ELK/Wazuh SIEM stack. PC 2 (32GB Desktop Tower) splits resources by running a bare-metal VMware ESXi 8.0 hypervisor dedicated strictly to your TrueNAS SAN array, while running VirtualBox on the base desktop OS to host the Pfsense-2 VM, Windows DC, and client endpoints. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: Management and Azure cloud identity syncing route over **VLAN 99 (MTU 1500)**, while TrueNAS shares raw block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** with blank default gateways directly to the Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (64GB ThinkPad Laptop) runs VirtualBox to host the Pfsense-1 VM, Kali Linux, and the heavy central ELK/Wazuh SIEM stack. PC 2 (32GB Desktop Tower) splits resources by running a bare-metal Proxmox hypervisor dedicated strictly to your TrueNAS SAN array, while running VirtualBox on the base desktop OS to host the Pfsense-2 VM, Windows DC, and client endpoints. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: Management and Azure cloud identity syncing route over **VLAN 99 (MTU 1500)**, while TrueNAS shares raw block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** with blank default gateways directly to the Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -142,7 +142,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **TrueNAS Core GUI:** https://192.168.88.10
 
-**VMware ESXi GUI:** https://192.168.88.2
+**Proxmox GUI:** https://192.168.88.2
 
 **Cisco Switch CLI:** SSH to 192.168.99.2
 
@@ -155,7 +155,7 @@ Management access restricted to Management VLAN 99 (192.168.99.0/24) and Tailsca
 
 - **Next-Generation Firewall (NGFW) Migration:** Transition network boundaries away from legacy pfSense appliances by deploying a multi-vendor **Palo Alto VM-Series** edge gateway and a corporate **FortiGate VM** cluster to practice advanced zone-based filtering, SSL decryption, and enterprise security management.
 - **Cross-Vendor Hybrid Mesh VPN:** Establish a production-grade **IPsec Site-to-Site VPN Tunnel** directly linking the Palo Alto core (PC 1) and FortiGate domain (PC 2) to secure traffic routing between distinct physical and virtual compute hosts.
-- **Dedicated iSCSI IP SAN Array:** Virtualize **TrueNAS Core** within a bare-metal **VMware ESXi 8.0 hypervisor** on the secondary desktop PC to instantiate a high-performance block-storage fabric. Allocate separate **iSCSI LUN block drives** over an isolated, un-routed **Storage Network (VLAN 88)** running Jumbo Frames (**MTU 9000**) to optimize Elasticsearch disk IOPS and host native VirtualBox `.vdi` disk cores.
+- **Dedicated iSCSI IP SAN Array:** Virtualize **TrueNAS Core** within a bare-metal **Proxmox hypervisor** on the secondary Dell Optiplex to instantiate a high-performance block-storage fabric. Allocate separate **iSCSI LUN block drives** over an isolated, un-routed **Storage Network (VLAN 88)** running Jumbo Frames (**MTU 9000**) to optimize Elasticsearch disk IOPS and host native VirtualBox `.vdi` disk cores.
 - **Three-Tier Distributed Storage Pool:** Segment hardware assets into distinct operational layers by maintaining the Raspberry Pi 5 **Samba CE NAS** as a rolling Suricata PCAP packet dump vault (Tier 2) and a cold VM disaster recovery backup repository (Tier 3), completely independent of the hot TrueNAS block array (Tier 1).
 - **Physical Cisco Backplane Integration:** Implement an enterprise hardware core/access topology using a physical **Cisco Catalyst 2960-CX** Layer 2 access switch and a **3560-CX** Layer 3 core routing switch. Aggregate multi-host links using **LACP EtherChannel bundling** and enforce strict **802.1Q VLAN trunk isolation** across the desktop workspace.
 - **Out-of-Band Hardware Traffic Mirroring:** Configure a hardware **SPAN port** on the physical Cisco switches to mirror raw network traffic fragments straight into the out-of-band Raspberry Pi 5's capture interface (`eth0`), eliminating local hypervisor packet collection overhead.
