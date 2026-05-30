@@ -141,9 +141,6 @@ The lab splits computing workloads across a multi-host distributed topology to p
 ---
 
 ## Upcoming Enhancements
-
-- **Next-Generation Firewall (NGFW) Migration:** Transition network boundaries away from legacy pfSense appliances by deploying a multi-vendor **Palo Alto VM-Series** edge gateway and a corporate **FortiGate VM** cluster to practice advanced zone-based filtering, SSL decryption, and enterprise security management.
-- **Cross-Vendor Hybrid Mesh VPN:** Establish a production-grade **IPsec Site-to-Site VPN Tunnel** directly linking the Palo Alto core (PC 1) and FortiGate domain (PC 2) to secure traffic routing between distinct physical and virtual compute hosts.
 - **Dedicated iSCSI IP SAN Array:** Virtualize **TrueNAS Core** within a bare-metal **Proxmox hypervisor** on the secondary Dell Optiplex to instantiate a high-performance block-storage fabric. Allocate separate **iSCSI LUN block drives** over an isolated, un-routed **Storage Network (VLAN 88)** running Jumbo Frames (**MTU 9000**) to optimize Elasticsearch disk IOPS and host native VirtualBox `.vdi` disk cores.
 - **Three-Tier Distributed Storage Pool:** Segment hardware assets into distinct operational layers by maintaining the Raspberry Pi 5 **Samba CE NAS** as a rolling Suricata PCAP packet dump vault (Tier 2) and a cold VM disaster recovery backup repository (Tier 3), completely independent of the hot TrueNAS block array (Tier 1).
 - **Physical Cisco Backplane Integration:** Implement an enterprise hardware core/access topology using a physical **Cisco Catalyst 2960-CX** Layer 2 access switch and a **3560-CX** Layer 3 core routing switch. Aggregate multi-host links using **LACP EtherChannel bundling** and enforce strict **802.1Q VLAN trunk isolation** across the desktop workspace.
