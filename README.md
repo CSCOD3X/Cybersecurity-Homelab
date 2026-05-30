@@ -149,7 +149,6 @@ The lab splits computing workloads across a multi-host distributed topology to p
 - **Cloud-Native Threat Intelligence Node:** Spin up a public cloud **Linode VPS instance** running a standalone **T-Pot Honeypot Framework** (Cowrie, Dionaea, Honeytrap) to safely capture live global internet attacker telemetry. Route the external JSON alert streams down via TLS into the local Logstash pipeline to cross-correlate public Indicators of Compromise (IOCs) against home network edge logs.
 - **Shuffle SOAR Orchestration:** Build automated incident response and containment playbooks inside the **Shuffle SOAR platform**, parsing high-severity Wazuh alerts to execute automated API calls back to network security gateways.
 - **SANS SIFT Forensics Workspace:** Integrate a dedicated **SANS SIFT Workstation** environment into the post-incident pipeline, providing security analysts with specialized tools to mount raw disk images, extract system artifacts, and run timeline forensics for deep-dive threat investigations.
-- **Dynamic Edge Security Overhauls:** Package **DuckDNS** and an Nginx SSL reverse proxy inside the Raspberry Pi 5 Docker environment to track dynamic public WAN IP changes and enforce fully trusted Let's Encrypt HTTPS/SSL certificates across all internal lab management web UIs via secure **Tailscale Split-DNS** tunnels.
 
 
 ---
