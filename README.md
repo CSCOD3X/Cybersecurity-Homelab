@@ -3,14 +3,14 @@
 ![Last Updated](https://img.shields.io/badge/Updated-May%202026-blue)
 
 > This is a continuous learning project
+
 ## Overview
 
 The Homelab project implements a complete Security Operations Center platform for security monitoring, threat detection. The lab simulates a multi-site enterprise environment with network segmentation, centralized logging, intrusion detection, and endpoint security, providing hands-on experience with professional security tools and workflows.
 
 ---
 
-<img width="7673" height="9394" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/d066672a-4e42-4bc3-b037-ea1f0b7c271b" />
-
+<img width="7632" height="9252" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/80585026-2040-4edf-950f-be551278b886" />
 
 ---
 
@@ -18,15 +18,15 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ### pfSense Firewalls (Virtual Machines - Site A & Site B)
 
-Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added snort IDS/IPS for internal network traffic detection and blocking suspicous traffic from the attacker.
+Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added Snort IDS/IPS for internal network traffic detection and blocking suspicious traffic from the attacker.
 
 ### Physical Cisco Catalyst Switch Stack (2960-CX & 3560-CX Compact Hardware)
 
 Acts as the high-speed physical network backplane across the desk. The 2960-CX Layer 2 switch aggregates physical PC hosts and trunks VLAN tags over a 2-cable LACP EtherChannel bundle to the 3560-CX Layer 3 Core switch, which processes hardware-level inter-VLAN routing and mirrors packet fragments via a SPAN port.
 
-### TrueNAS Core IP SAN (Virtual Machine - Proxmox on Dell Optiplex)
+### TerraMaster F4-425 NAS — iSCSI IP SAN
 
-Operates on a dedicated bare-metal hypervisor node to serve as an enterprise-grade block-storage SAN appliance. Passes through a physical 4TB external hard drive to carve out separate low-latency iSCSI LUN block allocations over a completely isolated, un-routed Storage Fabric (VLAN 88, Jumbo MTU 9000).
+Serves as the dedicated enterprise-grade network storage appliance providing centralized block storage and file services across the lab. The TerraMaster F4-425 is a 4-bay NAS with a quad-core Intel processor and 10GbE capability, running TOS (TerraMaster Operating System) to manage storage pools, RAID arrays, and iSCSI targets. Configured with an isolated Storage VLAN (VLAN 88, Jumbo MTU 9000) to deliver low-latency iSCSI LUN block storage directly to Elasticsearch data directories for optimized disk I/O performance.
 
 ### Suricata IDS/IPS (Docker Container on Raspberry Pi 5)
 
@@ -38,7 +38,7 @@ Acts as a centralized Extended Detection and Response platform for endpoint secu
 
 ### ELK Stack (Docker Container on Ubuntu VM - SOC Controller)
 
-Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash centralizes log intake, receiving direct syslog tables from Palo Alto/FortiGate on port 5140 and processing Suricata/Filebeat fields. Elasticsearch indexes **300,000+ Suricata events** and **140,000+ firewall logs**, utilizing a high-speed 2.5TB iSCSI SAN LUN to optimize disk I/O performance. Kibana provides real-time security dashboards for threat visualization and incident investigation.
+Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash centralizes log intake, receiving syslog from pfSense firewalls on port 5140 and processing Suricata and Filebeat fields. Elasticsearch indexes **300,000+ Suricata events** and **140,000+ firewall logs**, utilizing the TerraMaster iSCSI SAN LUN over VLAN 88 to optimize disk I/O performance. Kibana provides real-time security dashboards for threat visualization and incident investigation.
 
 ### Shuffle SOAR Platform (Docker Container on Ubuntu VM)
 
@@ -57,6 +57,7 @@ Enables secure remote access to the entire lab environment from outside location
 Deployed on the same Raspberry Pi 5 security sensor, providing DNS-level threat intelligence and query log forwarding to Logstash while acting as a DNS sinkhole to drop outbound malware C2 domains.
 
 ### n8n Automation Platform (Docker Container on Ubuntu VM)
+
 Provides workflow automation and integration across SOC services. Acts as a low-code orchestration engine to connect Suricata, Wazuh, ELK, Shuffle SOAR, and external APIs. Enables automated enrichment of alerts (e.g., querying VirusTotal, WHOIS, or threat intel feeds), ticket creation in Jira, and notification routing to email/Slack. Simplifies repetitive SOC tasks by chaining triggers and actions into visual workflows, reducing manual analyst workload and accelerating incident response.
 
 ### Linode Cloud VPS (Public Cloud Debian Instance)
@@ -67,25 +68,25 @@ Hosts a standalone public cloud **T-Pot Honeypot Framework** out-of-band. Captur
 
 Serves as the dedicated attack machine for penetration testing and detection validation. Used to simulate real-world attacks including port scans, SSH brute force, web directory enumeration, and DoS attacks to validate SOC detection capabilities.
 
-### SANS SIFT Workstation (DFIR vm)
-Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations.
+### SANS SIFT Workstation (DFIR VM)
+
+Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations. Forensic evidence stored on TerraMaster NAS for integrity and persistence.
 
 ### Internal Endpoints
 
 **Windows 10 VM:** Provides Windows-based endpoint for monitoring testing and client-side attack simulation.
 
-**Windows Domain Controller:** Acts as central authority for authentication and Active Directory services. Runs the **Azure AD (Microsoft Entra) Connect Sync agent** to establish outbound Password Hash Synchronization (PHS) to a cloud tenant, enabling hybrid identity tracking and User-ID firewall integration.
+**Windows Domain Controller:** Acts as central authority for authentication and Active Directory services. Runs the **Microsoft Entra Connect Sync agent** to establish outbound Password Hash Synchronization (PHS) to a cloud tenant, enabling hybrid identity tracking and User-ID firewall integration.
 
 **Red Hat Linux:** Serves as Linux production server for SSH brute force testing and Linux security monitoring.
 
 **K8s Node:** Provides container host environment for Kubernetes security monitoring practice.
 
-
 ---
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (64GB ThinkPad Laptop) runs VirtualBox to host the Pfsense-1 VM, Kali Linux, and the heavy central ELK/Wazuh SIEM stack. PC 2 (32GB Desktop Tower) splits resources by running a bare-metal Proxmox hypervisor dedicated strictly to your TrueNAS SAN array, while running VirtualBox on the base desktop OS to host the Pfsense-2 VM, Windows DC, and client endpoints. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: Management and Azure cloud identity syncing route over **VLAN 99 (MTU 1500)**, while TrueNAS shares raw block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** with blank default gateways directly to the Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor, eliminating the complexity of nested virtualization for storage workloads. All physical nodes connect via Cat6 to a Cisco 2960-CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco 3560-CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -97,7 +98,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Firewall Layer:** Unauthorized access via blocked connection logs, reconnaissance via multiple blocked ports from same source, policy violations via rule match logging, VPN issues via authentication failure logs.
 
-**Cloud Identity & Ingestion Layer:** Account compromise via anomalous Azure Active Directory sign-in indicators, automated brute-force containment via Shuffle SOAR orchestration, full User-ID mapping to track malicious traffic by on-premises and cloud user profiles rather than static IPs.
+**Cloud Identity & Ingestion Layer:** Account compromise via anomalous Microsoft Entra ID sign-in indicators, automated brute-force containment via Shuffle SOAR orchestration, full User-ID mapping to track malicious traffic by on-premises and cloud user profiles rather than static IPs.
 
 ---
 
@@ -109,17 +110,18 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Ping Flood:** ICMP flood triggered pfSense DoS pattern detection logs.
 
-**SMB enumeration using enum4linux:** Detected scans on nas storage.
-
+**SMB Enumeration:** enum4linux scan against NAS storage detected and alerted in Kibana.
 
 ---
+
 ## Key Achievements
 
 - Deployed dual pfSense firewalls with site-to-site IPsec VPN and network segmentation
 - Implemented Suricata IDS/IPS on dedicated Raspberry Pi 5 with **65,796 detection rules**
+- Deployed Snort IDS/IPS inline on both pfSense firewalls for internal east-west traffic inspection
 - Deployed Wazuh XDR across Windows and Linux endpoints with FIM and malware detection
 - Built complete ELK Stack processing **300,000+ Suricata events** and **140,000+ pfSense logs**
-- Created two professional Kibana dashboards for network, endpoint
+- Created professional Kibana dashboards for network and endpoint security visualization
 - Validated **4 attack types** (port scan, SSH brute force, DoS, SMB enumeration) with full detection coverage
 
 ---
@@ -132,29 +134,32 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Shuffle SOAR:** https://soar.duckdns.org:3002
 
-**Pfsense-1 VM GUI:** https://192.168.1.40:8443
+**pfSense-1 GUI:** https://192.168.1.40:8443
 
-**Pfsesne-2 VM GUI:** https://192.168.1.41:8443
+**pfSense-2 GUI:** https://192.168.1.41:8443
 
 **Pi-hole GUI:** http://192.168.1.39:80
+
+**TerraMaster GUI:** https://192.168.88.10
 
 ---
 
 ## Upcoming Enhancements
-- **Dedicated iSCSI IP SAN Array:** Virtualize **TrueNAS Core** within a bare-metal **Proxmox hypervisor** on the secondary Dell Optiplex to instantiate a high-performance block-storage fabric. Allocate separate **iSCSI LUN block drives** over an isolated, un-routed **Storage Network (VLAN 88)** running Jumbo Frames (**MTU 9000**) to optimize Elasticsearch disk IOPS and host native VirtualBox `.vdi` disk cores.
-- **Three-Tier Distributed Storage Pool:** Segment hardware assets into distinct operational layers by maintaining the Raspberry Pi 5 **Samba CE NAS** as a rolling Suricata PCAP packet dump vault (Tier 2) and a cold VM disaster recovery backup repository (Tier 3), completely independent of the hot TrueNAS block array (Tier 1).
-- **Physical Cisco Backplane Integration:** Implement an enterprise hardware core/access topology using a physical **Cisco Catalyst 2960-CX** Layer 2 access switch and a **3560-CX** Layer 3 core routing switch. Aggregate multi-host links using **LACP EtherChannel bundling** and enforce strict **802.1Q VLAN trunk isolation** across the desktop workspace.
-- **Out-of-Band Hardware Traffic Mirroring:** Configure a hardware **SPAN port** on the physical Cisco switches to mirror raw network traffic fragments straight into the out-of-band Raspberry Pi 5's capture interface (`eth0`), eliminating local hypervisor packet collection overhead.
-- **Hybrid Cloud Identity Synchronization:** Deploy the **Microsoft Entra Cloud Sync** agent on the on-premises Windows Server Domain Controller to establish encrypted Password Hash Synchronization (PHS) to an **Azure Active Directory cloud tenant**, enabling hybrid identity management and unlocking username-tracked User-ID logging profiles on edge firewalls.
-- **Cloud-Native Threat Intelligence Node:** Spin up a public cloud **Linode VPS instance** running a standalone **T-Pot Honeypot Framework** (Cowrie, Dionaea, Honeytrap) to safely capture live global internet attacker telemetry. Route the external JSON alert streams down via TLS into the local Logstash pipeline to cross-correlate public Indicators of Compromise (IOCs) against home network edge logs.
-- **Shuffle SOAR Orchestration:** Build automated incident response and containment playbooks inside the **Shuffle SOAR platform**, parsing high-severity Wazuh alerts to execute automated API calls back to network security gateways.
-- **SANS SIFT Forensics Workspace:** Integrate a dedicated **SANS SIFT Workstation** environment into the post-incident pipeline, providing security analysts with specialized tools to mount raw disk images, extract system artifacts, and run timeline forensics for deep-dive threat investigations.
 
-
----
-
-By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in next-generation firewall management, cross-vendor IPsec VPN, SIEM operations, IDS/IPS deployment, endpoint detection and response, SOAR orchestration, honeypot intelligence gathering, SAN storage architecture, hybrid cloud identity synchronization, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated storage fabric.
+- **TerraMaster iSCSI Optimization:** Configure dedicated iSCSI LUN over isolated Storage VLAN 88 with Jumbo Frames (MTU 9000) to maximize Elasticsearch disk IOPS and reduce storage latency.
+- **Three-Tier Storage Activation:** Fully activate all three storage tiers — TerraMaster iSCSI for hot Elasticsearch data,Raspberry pi 5 Samba for warm PCAP and backup storage, and cold external archive for VM disaster recovery.
+- **Physical Cisco Backplane Integration:** Implement enterprise hardware topology using Cisco Catalyst 2960-CX and 3560-CX with LACP EtherChannel bundling and 802.1Q VLAN trunk isolation.
+- **Out-of-Band Hardware Traffic Mirroring:** Configure hardware SPAN port on Cisco switches to mirror raw traffic directly into Raspberry Pi 5 eth0, eliminating hypervisor packet collection overhead.
+- **Hybrid Cloud Identity Synchronization:** Deploy Microsoft Entra Cloud Sync agent on Windows Server Domain Controller to establish Password Hash Synchronization to Azure cloud tenant, enabling hybrid identity management.
+- **Cloud-Native Threat Intelligence Node:** T-Pot Honeypot Framework on Linode VPS capturing live global attacker telemetry and shipping to local Logstash pipeline via TLS.
+- **Shuffle SOAR Playbooks:** Automated incident response playbooks parsing high-severity Wazuh alerts and executing API calls for automated containment.
+- **SANS SIFT Forensics Integration:** Full integration of SANS SIFT Workstation into post-incident pipeline with evidence storage on TerraMaster NAS.
+- **n8n + Jira Ticketing:** Automated Jira ticket creation from Shuffle SOAR via n8n workflows for full SOC incident tracking.
 
 ---
 
-Repository Maintained by Ahmed Ashraf | Last Updated: 22 May 2026
+By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in firewall management, IPsec VPN, SIEM operations, multi-layer IDS/IPS deployment, endpoint detection and response, SOAR orchestration, honeypot intelligence gathering, NAS storage architecture, hybrid cloud identity synchronization, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated SAN storage fabric.
+
+---
+
+Repository Maintained by Ahmed Ashraf | Last Updated: May 2026
