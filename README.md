@@ -20,9 +20,9 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added Snort IDS/IPS for internal network traffic detection and blocking suspicious traffic from the attacker.
 
-### Physical Cisco Catalyst Switch Stack (Cisco SG300-10 & Cisco Catalyst C1300-16T-2G)
+### Physical Cisco Catalyst Switch Stack (Cisco Catalyst 2960CX & Cisco Catalyst 3560CX)
 
-Acts as the high-speed physical network backplane across the desk. The SG300-10 Layer 2 switch aggregates physical PC hosts and trunks VLAN tags over a 2-cable LACP EtherChannel bundle to the C1300-16T-2G Layer 3 Core switch, which processes hardware-level inter-VLAN routing and mirrors packet fragments via a SPAN port.
+Acts as the high-speed physical network backplane across the desk. The Catalyst 2960CX Layer 2 switch aggregates physical PC hosts and trunks VLAN tags over a 2-cable LACP EtherChannel bundle to the Catalyst 3560CX Layer 3 Core switch, which processes hardware-level inter-VLAN routing and mirrors packet fragments via a SPAN port.
 
 ### TerraMaster F4-425 NAS — iSCSI IP SAN
 
@@ -86,7 +86,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor, eliminating the complexity of nested virtualization for storage workloads. All physical nodes connect via Cat6 to a Cisco SG300-10 Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst C1300-16T-2G Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor, eliminating the complexity of nested virtualization for storage workloads. All physical nodes connect via Cat6 to a Cisco Catalyst 2960CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst 3560CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -146,7 +146,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 - **TerraMaster iSCSI Optimization:** Configure dedicated iSCSI LUN over isolated Storage VLAN 88 with Jumbo Frames (MTU 9000) to maximize Elasticsearch disk IOPS and reduce storage latency.
 - **Three-Tier Storage Activation:** Fully activate all three storage tiers — TerraMaster iSCSI for hot Elasticsearch data,Raspberry pi 5 Samba for warm PCAP and backup storage, and cold external archive for VM disaster recovery.
-- **Physical Cisco Backplane Integration:** Implement enterprise hardware topology using Cisco SG300-10 and Cisco Catalyst C1300-16T-2G with LACP EtherChannel bundling and 802.1Q VLAN trunk isolation.
+- **Physical Cisco Backplane Integration:** Implement enterprise hardware topology using Cisco Catalyst 2960CX and Cisco Catalyst 3560CX with LACP EtherChannel bundling and 802.1Q VLAN trunk isolation.
 - **Out-of-Band Hardware Traffic Mirroring:** Configure hardware SPAN port on Cisco switches to mirror raw traffic directly into Raspberry Pi 5 eth0, eliminating hypervisor packet collection overhead.
 - **Hybrid Cloud Identity Synchronization:** Deploy Microsoft Entra Cloud Sync agent on Windows Server Domain Controller to establish Password Hash Synchronization to Azure cloud tenant, enabling hybrid identity management.
 - **Cloud-Native Threat Intelligence Node:** T-Pot Honeypot Framework on Linode VPS capturing live global attacker telemetry and shipping to local Logstash pipeline via TLS.
