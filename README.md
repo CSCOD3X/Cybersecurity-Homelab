@@ -10,7 +10,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7653" height="9313" alt="Cybersecurity Homelab(future)" src="https://github.com/user-attachments/assets/de862203-9075-44fc-8ad0-f904253e4586" />
+<img width="7693" height="9333" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/9a8cdaec-7246-4e06-b135-f95f88173319" />
 
 ---
 
@@ -68,9 +68,21 @@ Hosts a standalone public cloud **T-Pot Honeypot Framework** out-of-band. Captur
 
 Serves as the dedicated attack machine for penetration testing and detection validation. Used to simulate real-world attacks including port scans, SSH brute force, web directory enumeration, and DoS attacks to validate SOC detection capabilities.
 
-### SANS SIFT Workstation (DFIR VM)
+### SANS SIFT Workstation (DFIR VM — Proxmox on Dell Optiplex)
 
-Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace to mount raw system images and analyze historical packet captures for advanced threat investigations. Forensic evidence stored on TerraMaster NAS for integrity and persistence.
+Provides an isolated, professional Digital Forensics and Incident Response (DFIR) workspace dedicated to post-incident analysis. Runs as a standalone VM on the Proxmox hypervisor hosted on the Dell Optiplex, keeping forensic workloads completely separate from the live SOC environment. Used to mount raw disk images, extract system artifacts, analyze memory dumps, and perform timeline forensics for advanced threat investigations. Forensic evidence stored on TerraMaster NAS for integrity and long-term retention.
+
+### REMnux Workstation (Malware Analysis VM — Proxmox on Dell Optiplex)
+
+Provides a dedicated malware analysis and reverse engineering environment running as a standalone VM on the Proxmox hypervisor. REMnux is a Linux distribution purpose-built for analyzing malware samples, examining suspicious files, and reverse engineering binaries. Used alongside SANS SIFT to provide a complete post-incident analysis pipeline — SIFT handles digital forensics and incident reconstruction while REMnux handles malware sample dissection and behavioral analysis of artifacts recovered from compromised endpoints.
+
+### Monitoring and CTI VM (Proxmox on Dell Optiplex):
+
+A dedicated virtual machine running on the Proxmox hypervisor hosting two enterprise-grade security platforms via Docker:
+
+**Splunk** — Industry-leading SIEM platform deployed alongside ELK Stack to provide comparative SIEM experience and practice with Splunk Processing Language (SPL). Ingests forwarded logs from Logstash for cross-platform security analysis and dashboard building, reflecting the reality that Splunk dominates enterprise SOC environments.
+
+**OpenCTI** — Enterprise-grade Cyber Threat Intelligence platform used by government agencies, MSSPs, and large enterprise SOC teams. Manages structured threat intelligence including IOCs, TTPs, threat actor profiles, and campaign tracking. Integrates with T-Pot honeypot telemetry, VirusTotal enrichment, and the MITRE ATT&CK framework to provide actionable intelligence that feeds back into detection rules and Wazuh alerts.
 
 ### Internal Endpoints
 
@@ -86,7 +98,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor, eliminating the complexity of nested virtualization for storage workloads. All physical nodes connect via Cat6 to a Cisco Catalyst 2960CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst 3560CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor. The **Dell Optiplex** runs a bare-metal **Proxmox hypervisor** hosting three specialized VMs — SANS SIFT for digital forensics, REMnux for malware analysis, and a Monitoring and CTI VM running Splunk and OpenCTI via Docker. All physical nodes connect via Cat6 to a Cisco Catalyst 2960CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst 3560CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -145,18 +157,22 @@ The lab splits computing workloads across a multi-host distributed topology to p
 ## Upcoming Enhancements
 
 - **TerraMaster iSCSI Optimization:** Configure dedicated iSCSI LUN over isolated Storage VLAN 88 with Jumbo Frames (MTU 9000) to maximize Elasticsearch disk IOPS and reduce storage latency.
-- **Three-Tier Storage Activation:** Fully activate all three storage tiers — TerraMaster iSCSI for hot Elasticsearch data,Raspberry pi 5 Samba for warm PCAP and backup storage, and cold external archive for VM disaster recovery.
+- **Three-Tier Storage Activation:** Fully activate all three storage tiers — TerraMaster iSCSI for hot Elasticsearch data, Raspberry Pi 5 Samba for warm PCAP and backup storage, and cold external archive for VM disaster recovery.
 - **Physical Cisco Backplane Integration:** Implement enterprise hardware topology using Cisco Catalyst 2960CX and Cisco Catalyst 3560CX with LACP EtherChannel bundling and 802.1Q VLAN trunk isolation.
 - **Out-of-Band Hardware Traffic Mirroring:** Configure hardware SPAN port on Cisco switches to mirror raw traffic directly into Raspberry Pi 5 eth0, eliminating hypervisor packet collection overhead.
 - **Hybrid Cloud Identity Synchronization:** Deploy Microsoft Entra Cloud Sync agent on Windows Server Domain Controller to establish Password Hash Synchronization to Azure cloud tenant, enabling hybrid identity management.
 - **Cloud-Native Threat Intelligence Node:** T-Pot Honeypot Framework on Linode VPS capturing live global attacker telemetry and shipping to local Logstash pipeline via TLS.
 - **Shuffle SOAR Playbooks:** Automated incident response playbooks parsing high-severity Wazuh alerts and executing API calls for automated containment.
-- **SANS SIFT Forensics Integration:** Full integration of SANS SIFT Workstation into post-incident pipeline with evidence storage on TerraMaster NAS.
+- **SANS SIFT Forensics Integration:** Full integration of SANS SIFT Workstation into post-incident pipeline with evidence storage on TerraMaster NAS for forensic integrity.
+- **REMnux Malware Analysis Pipeline:** Integrate REMnux Workstation into the post-incident workflow — malware samples recovered by Wazuh FIM or T-Pot honeypot automatically staged for REMnux analysis, with findings documented and fed back into OpenCTI as new IOCs.
+- **OpenCTI Threat Intelligence Platform:** Deploy OpenCTI via Docker on the Monitoring and CTI VM to provide structured threat intelligence management. Integrate with T-Pot honeypot telemetry, VirusTotal enrichment, and MITRE ATT&CK framework. Feed enriched IOCs back into Wazuh detection rules and Kibana dashboards for closed-loop threat intelligence.
+- **Splunk SIEM Deployment:** Deploy Splunk alongside ELK Stack on the Monitoring and CTI VM for comparative enterprise SIEM experience. Forward logs from Logstash to Splunk for SPL query practice and cross-platform dashboard building reflecting real enterprise SOC tooling.
+- **OpenCTI → ELK Integration:** Configure bidirectional enrichment between OpenCTI and Elasticsearch — Kibana alerts trigger OpenCTI IOC lookups, and OpenCTI threat feeds automatically create Wazuh detection rules.
 - **n8n + Jira Ticketing:** Automated Jira ticket creation from Shuffle SOAR via n8n workflows for full SOC incident tracking.
 
 ---
 
-By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in firewall management, IPsec VPN, SIEM operations, multi-layer IDS/IPS deployment, endpoint detection and response, SOAR orchestration, honeypot intelligence gathering, NAS storage architecture, hybrid cloud identity synchronization, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated SAN storage fabric.
+By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in firewall management, IPsec VPN, SIEM operations, multi-layer IDS/IPS deployment, endpoint detection and response, SOAR orchestration, honeypot intelligence gathering, NAS storage architecture, hybrid cloud identity synchronization, malware analysis, cyber threat intelligence management, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated SAN storage fabric.
 
 ---
 
