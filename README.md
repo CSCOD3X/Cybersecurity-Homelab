@@ -10,7 +10,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7693" height="9333" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/9a8cdaec-7246-4e06-b135-f95f88173319" />
+<img width="7936" height="9374" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/bbb4d389-26a6-4be3-805c-68b117e2a366" />
 
 ---
 
@@ -76,7 +76,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 Provides a dedicated malware analysis and reverse engineering environment running as a standalone VM on the Proxmox hypervisor. REMnux is a Linux distribution purpose-built for analyzing malware samples, examining suspicious files, and reverse engineering binaries. Used alongside SANS SIFT to provide a complete post-incident analysis pipeline — SIFT handles digital forensics and incident reconstruction while REMnux handles malware sample dissection and behavioral analysis of artifacts recovered from compromised endpoints.
 
-### Monitoring and CTI VM (Proxmox on Dell Optiplex):
+### Analysis and CTI VM (Proxmox on Dell Optiplex):
 
 A dedicated virtual machine running on the Proxmox hypervisor hosting two enterprise-grade security platforms via Docker:
 
