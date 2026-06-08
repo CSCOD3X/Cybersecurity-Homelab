@@ -1,6 +1,6 @@
 # Cybersecurity-Homelab
 ![Status](https://img.shields.io/badge/Status-Under%20Development-orange)
-![Last Updated](https://img.shields.io/badge/Updated-May%202026-blue)
+![Last Updated](https://img.shields.io/badge/Updated-June%202026-blue)
 
 > This is a continuous learning project
 
