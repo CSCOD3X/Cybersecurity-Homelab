@@ -10,7 +10,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7531" height="9698" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/32f12fcb-d7db-4ef3-a8cc-3cd333812b5e" />
+<img width="7491" height="9657" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/461e678a-13d1-4452-9bf0-643ddbeba3c9" />
 
 ---
 
