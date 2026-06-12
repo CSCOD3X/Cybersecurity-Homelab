@@ -40,9 +40,9 @@ Acts as a centralized Extended Detection and Response platform for endpoint secu
 
 Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. Logstash centralizes log intake, receiving syslog from pfSense firewalls on port 5140 and processing Suricata and Filebeat fields. Elasticsearch indexes **300,000+ Suricata events** and **140,000+ firewall logs**, utilizing the TerraMaster iSCSI SAN LUN over VLAN 88 to optimize disk I/O performance. Kibana provides real-time security dashboards for threat visualization and incident investigation.
 
-### Shuffle SOAR Platform (Docker Container on Ubuntu VM)
+### n8n Automation Platform (Docker Container on Ubuntu VM)
 
-Provides automated incident response and orchestration. Intercepts high-severity alerts from the Wazuh Manager and executes dynamic playbooks, communicating back with security gateways to automate containment workflows.
+Provides automated incident response, workflow automation, and orchestration. Intercepts high-severity alerts from the Wazuh Manager and executes dynamic workflows — querying VirusTotal for IOC enrichment, creating Jira tickets for incident tracking, and sending Gmail notifications. Connects Wazuh, ELK Stack, VirusTotal, and Jira into a unified automated response pipeline, reducing manual analyst workload and accelerating incident response.
 
 ### Uptime Kuma (Docker Container on Ubuntu VM)
 
@@ -55,10 +55,6 @@ Enables secure remote access to the entire lab environment from outside location
 ### Pi-hole (DNS Sinkhole)
 
 Deployed on the same Raspberry Pi 5 security sensor, providing DNS-level threat intelligence and query log forwarding to Logstash while acting as a DNS sinkhole to drop outbound malware C2 domains.
-
-### n8n Automation Platform (Docker Container on Ubuntu VM)
-
-Provides workflow automation and integration across SOC services. Acts as a low-code orchestration engine to connect Suricata, Wazuh, ELK, Shuffle SOAR, and external APIs. Enables automated enrichment of alerts (e.g., querying VirusTotal, WHOIS, or threat intel feeds), ticket creation in Jira, and notification routing to email/Slack. Simplifies repetitive SOC tasks by chaining triggers and actions into visual workflows, reducing manual analyst workload and accelerating incident response.
 
 ### Linode Cloud VPS (Public Cloud Debian Instance)
 
@@ -76,7 +72,7 @@ Provides an isolated, professional Digital Forensics and Incident Response (DFIR
 
 Provides a dedicated malware analysis and reverse engineering environment running as a standalone VM on the Proxmox hypervisor. REMnux is a Linux distribution purpose-built for analyzing malware samples, examining suspicious files, and reverse engineering binaries. Used alongside SANS SIFT to provide a complete post-incident analysis pipeline — SIFT handles digital forensics and incident reconstruction while REMnux handles malware sample dissection and behavioral analysis of artifacts recovered from compromised endpoints.
 
-### Analysis and CTI VM (Proxmox on Dell Optiplex):
+### Analysis and CTI VM (Proxmox on Dell Optiplex)
 
 A dedicated virtual machine running on the Proxmox hypervisor hosting two enterprise-grade security platforms via Docker:
 
@@ -110,7 +106,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 **Firewall Layer:** Unauthorized access via blocked connection logs, reconnaissance via multiple blocked ports from same source, policy violations via rule match logging, VPN issues via authentication failure logs.
 
-**Cloud Identity & Ingestion Layer:** Account compromise via anomalous Microsoft Entra ID sign-in indicators, automated brute-force containment via Shuffle SOAR orchestration, full User-ID mapping to track malicious traffic by on-premises and cloud user profiles rather than static IPs.
+**Cloud Identity & Ingestion Layer:** Account compromise via anomalous Microsoft Entra ID sign-in indicators, automated brute-force containment via n8n workflow orchestration, full User-ID mapping to track malicious traffic by on-premises and cloud user profiles rather than static IPs.
 
 ---
 
@@ -135,16 +131,17 @@ The lab splits computing workloads across a multi-host distributed topology to p
 - Built complete ELK Stack processing **300,000+ Suricata events** and **140,000+ pfSense logs**
 - Created professional Kibana dashboards for network and endpoint security visualization
 - Validated **4 attack types** (port scan, SSH brute force, DoS, SMB enumeration) with full detection coverage
+- Automated Wazuh and suricata alerts using n8n by enriching and checking with VirusTotal and sending alerts notifications to jira and gmail
 
 ---
 
 ## Service Access
 
-**Kibana Dashboard:** https://kibana.duckdns.org:5601
+**Kibana Dashboard:** https://192.168.1.55:5601
 
-**Uptime Kuma:** https://status.duckdns.org:3001
+**Uptime Kuma:** https://192.168.1.55:3001
 
-**Shuffle SOAR:** https://soar.duckdns.org:3002
+**n8n Automation:** https://192.168.1.55:5678
 
 **pfSense-1 GUI:** https://192.168.1.40:8443
 
@@ -162,18 +159,17 @@ The lab splits computing workloads across a multi-host distributed topology to p
 - **Out-of-Band Hardware Traffic Mirroring:** Configure hardware SPAN port on Cisco switches to mirror raw traffic directly into Raspberry Pi 5 eth0, eliminating hypervisor packet collection overhead.
 - **Hybrid Cloud Identity Synchronization:** Deploy Microsoft Entra Cloud Sync agent on Windows Server Domain Controller to establish Password Hash Synchronization to Azure cloud tenant, enabling hybrid identity management.
 - **Cloud-Native Threat Intelligence Node:** T-Pot Honeypot Framework on Linode VPS capturing live global attacker telemetry and shipping to local Logstash pipeline via TLS.
-- **Shuffle SOAR Playbooks:** Automated incident response playbooks parsing high-severity Wazuh alerts and executing API calls for automated containment.
+- **n8n SOAR Workflows:** Expand automated incident response workflows — parse high-severity Wazuh alerts, execute VirusTotal enrichment, auto-create Jira tickets, and route notifications via Gmail for full SOC automation.
 - **SANS SIFT Forensics Integration:** Full integration of SANS SIFT Workstation into post-incident pipeline with evidence storage on TerraMaster NAS for forensic integrity.
 - **REMnux Malware Analysis Pipeline:** Integrate REMnux Workstation into the post-incident workflow — malware samples recovered by Wazuh FIM or T-Pot honeypot automatically staged for REMnux analysis, with findings documented and fed back into OpenCTI as new IOCs.
 - **OpenCTI Threat Intelligence Platform:** Deploy OpenCTI via Docker on the Monitoring and CTI VM to provide structured threat intelligence management. Integrate with T-Pot honeypot telemetry, VirusTotal enrichment, and MITRE ATT&CK framework. Feed enriched IOCs back into Wazuh detection rules and Kibana dashboards for closed-loop threat intelligence.
 - **Splunk SIEM Deployment:** Deploy Splunk alongside ELK Stack on the Monitoring and CTI VM for comparative enterprise SIEM experience. Forward logs from Logstash to Splunk for SPL query practice and cross-platform dashboard building reflecting real enterprise SOC tooling.
 - **OpenCTI → ELK Integration:** Configure bidirectional enrichment between OpenCTI and Elasticsearch — Kibana alerts trigger OpenCTI IOC lookups, and OpenCTI threat feeds automatically create Wazuh detection rules.
-- **n8n + Jira Ticketing:** Automated Jira ticket creation from Shuffle SOAR via n8n workflows for full SOC incident tracking.
 
 ---
 
-By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in firewall management, IPsec VPN, SIEM operations, multi-layer IDS/IPS deployment, endpoint detection and response, SOAR orchestration, honeypot intelligence gathering, NAS storage architecture, hybrid cloud identity synchronization, malware analysis, cyber threat intelligence management, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated SAN storage fabric.
+By setting up this comprehensive enterprise-grade SOC environment, users gain hands-on experience in firewall management, IPsec VPN, SIEM operations, multi-layer IDS/IPS deployment, endpoint detection and response, workflow automation and SOAR orchestration via n8n, honeypot intelligence gathering, NAS storage architecture, hybrid cloud identity synchronization, malware analysis, cyber threat intelligence management, and professional DFIR workflows. The lab provides a safe, controlled environment to practice real-world security monitoring skills in a realistic multi-site enterprise context with hardware-accelerated switching and dedicated SAN storage fabric.
 
 ---
 
-Repository Maintained by Ahmed Ashraf | Last Updated: May 2026
+Repository Maintained by Ahmed Ashraf | Last Updated: June 2026
