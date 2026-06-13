@@ -10,7 +10,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7491" height="9657" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/461e678a-13d1-4452-9bf0-643ddbeba3c9" />
+<img width="7612" height="9758" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/d7d38639-593c-46a9-a455-084ee5d5a431" />
 
 ---
 
@@ -42,7 +42,7 @@ Elasticsearch, Logstash, and Kibana work together as a complete SIEM solution. L
 
 ### n8n Automation Platform (Docker Container on Ubuntu VM)
 
-Provides automated incident response, workflow automation, and orchestration. Intercepts high-severity alerts from the Wazuh Manager and executes dynamic workflows — querying VirusTotal for IOC enrichment, creating Jira tickets for incident tracking, and sending Gmail notifications. Connects Wazuh, ELK Stack, VirusTotal, and Jira into a unified automated response pipeline, reducing manual analyst workload and accelerating incident response.
+Provides automated incident response, workflow automation, and orchestration. Intercepts high-severity alerts from the Wazuh Manager and executes dynamic workflows — querying VirusTotal and Shodan InternetDB for IOC enrichment, creating Jira tickets for incident tracking, and sending Gmail notifications. Connects Wazuh, ELK Stack, VirusTotal, and Jira into a unified automated response pipeline, reducing manual analyst workload and accelerating incident response.
 
 ### Uptime Kuma (Docker Container on Ubuntu VM)
 
