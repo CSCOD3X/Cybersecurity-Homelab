@@ -131,7 +131,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 - Built complete ELK Stack processing **300,000+ Suricata events** and **140,000+ pfSense logs**
 - Created professional Kibana dashboards for network and endpoint security visualization
 - Validated **4 attack types** (port scan, SSH brute force, DoS, SMB enumeration) with full detection coverage
-- Automated Wazuh and suricata alerts using n8n by enriching and checking with VirusTotal and sending alerts notifications to jira and gmail
+- Automated Wazuh and suricata alerts using n8n by enriching and checking with VirusTotal and shodan and sending alerts notifications to jira and gmail
 
 ---
 
