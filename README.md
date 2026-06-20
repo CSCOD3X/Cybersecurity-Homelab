@@ -10,7 +10,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ---
 
-<img width="7612" height="9758" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/d7d38639-593c-46a9-a455-084ee5d5a431" />
+<img width="7592" height="9273" alt="Cybersecurity Homelab" src="https://github.com/user-attachments/assets/ff7c2554-34bb-4c2b-a7a4-148bc9f127ca" />
 
 ---
 
@@ -18,7 +18,7 @@ The Homelab project implements a complete Security Operations Center platform fo
 
 ### pfSense Firewalls (Virtual Machines - Site A & Site B)
 
-Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added Snort IDS/IPS for internal network traffic detection and blocking suspicious traffic from the attacker.
+Serve as enterprise-grade network security appliances providing advanced firewalling, routing, and site-to-site VPN capabilities. Allow creation of network segments, firewall rules with default deny policies, and management access restrictions. Facilitate practice of network security, traffic monitoring, and firewall logging to SIEM. Also added Suricata IDS/IPS for internal network traffic detection and blocking suspicious traffic from the attacker.
 
 ### Physical Cisco Catalyst Switch Stack (Cisco Catalyst 2960CX & Cisco Catalyst 3560CX)
 
@@ -84,7 +84,7 @@ A dedicated virtual machine running on the Proxmox hypervisor hosting two enterp
 
 **Windows 10 VM:** Provides Windows-based endpoint for monitoring testing and client-side attack simulation.
 
-**Windows Domain Controller:** Acts as central authority for authentication and Active Directory services. Runs the **Microsoft Entra Connect Sync agent** to establish outbound Password Hash Synchronization (PHS) to a cloud tenant, enabling hybrid identity tracking and User-ID firewall integration.
+**Windows Domain Controller:** Acts as central authority for authentication and Active Directory services.
 
 **Red Hat Linux:** Serves as Linux production server for SSH brute force testing and Linux security monitoring.
 
@@ -94,7 +94,7 @@ A dedicated virtual machine running on the Proxmox hypervisor hosting two enterp
 
 ## Architecture Overview
 
-The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor. The **Dell Optiplex** runs a bare-metal **Proxmox hypervisor** hosting three specialized VMs — SANS SIFT for digital forensics, REMnux for malware analysis, and a Monitoring and CTI VM running Splunk and OpenCTI via Docker. All physical nodes connect via Cat6 to a Cisco Catalyst 2960CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst 3560CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management and Entra ID cloud identity traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
+The lab splits computing workloads across a multi-host distributed topology to prevent performance bottlenecks. PC 1 (ThinkPad Laptop) runs VirtualBox to host the pfSense-1 VM, Kali Linux, and the central ELK/Wazuh SIEM stack. PC 2 (Desktop Tower) runs VirtualBox on the base OS to host the pfSense-2 VM, Windows DC, and client endpoints. A dedicated **TerraMaster F4-425 NAS** provides centralized iSCSI block storage and file services independent of any hypervisor. The **Dell Optiplex** runs a bare-metal **Proxmox hypervisor** hosting three specialized VMs — SANS SIFT for digital forensics, REMnux for malware analysis, and a Monitoring and CTI VM running Splunk and OpenCTI via Docker. All physical nodes connect via Cat6 to a Cisco Catalyst 2960CX Layer 2 switch, bundling traffic over an LACP EtherChannel trunk to a Cisco Catalyst 3560CX Layer 3 switch. Networks are dual-homed across the Cisco backplane: management traffic routes over **VLAN 99 (MTU 1500)**, while the TerraMaster NAS delivers raw iSCSI block storage out-of-band over **VLAN 88 (Jumbo MTU 9000)** directly to Elasticsearch data directories. Logstash parses incoming local firewall logs, public cloud Linode T-Pot honeypot events, and Raspberry Pi 5 Suricata sensor traffic, ascending data vertically up a strict security operations hierarchy.
 
 ---
 
@@ -105,8 +105,6 @@ The lab splits computing workloads across a multi-host distributed topology to p
 **Endpoint Layer:** Malware execution via file integrity monitoring, privilege escalation via auditd, persistence via registry monitoring, lateral movement via authentication failure correlation.
 
 **Firewall Layer:** Unauthorized access via blocked connection logs, reconnaissance via multiple blocked ports from same source, policy violations via rule match logging, VPN issues via authentication failure logs.
-
-**Cloud Identity & Ingestion Layer:** Account compromise via anomalous Microsoft Entra ID sign-in indicators, automated brute-force containment via n8n workflow orchestration, full User-ID mapping to track malicious traffic by on-premises and cloud user profiles rather than static IPs.
 
 ---
 
@@ -126,7 +124,7 @@ The lab splits computing workloads across a multi-host distributed topology to p
 
 - Deployed dual pfSense firewalls with site-to-site IPsec VPN and network segmentation
 - Implemented Suricata IDS/IPS on dedicated Raspberry Pi 5 with **65,796 detection rules**
-- Deployed Snort IDS/IPS inline on both pfSense firewalls for internal east-west traffic inspection
+- Deployed Suricata IDS/IPS inline on both pfSense firewalls for internal east-west traffic inspection
 - Deployed Wazuh XDR across Windows and Linux endpoints with FIM and malware detection
 - Built complete ELK Stack processing **300,000+ Suricata events** and **140,000+ pfSense logs**
 - Created professional Kibana dashboards for network and endpoint security visualization
@@ -157,7 +155,6 @@ The lab splits computing workloads across a multi-host distributed topology to p
 - **Three-Tier Storage Activation:** Fully activate all three storage tiers — TerraMaster iSCSI for hot Elasticsearch data, Raspberry Pi 5 Samba for warm PCAP and backup storage, and cold external archive for VM disaster recovery.
 - **Physical Cisco Backplane Integration:** Implement enterprise hardware topology using Cisco Catalyst 2960CX and Cisco Catalyst 3560CX with LACP EtherChannel bundling and 802.1Q VLAN trunk isolation.
 - **Out-of-Band Hardware Traffic Mirroring:** Configure hardware SPAN port on Cisco switches to mirror raw traffic directly into Raspberry Pi 5 eth0, eliminating hypervisor packet collection overhead.
-- **Hybrid Cloud Identity Synchronization:** Deploy Microsoft Entra Cloud Sync agent on Windows Server Domain Controller to establish Password Hash Synchronization to Azure cloud tenant, enabling hybrid identity management.
 - **Cloud-Native Threat Intelligence Node:** T-Pot Honeypot Framework on Linode VPS capturing live global attacker telemetry and shipping to local Logstash pipeline via TLS.
 - **n8n SOAR Workflows:** Expand automated incident response workflows — parse high-severity Wazuh alerts, execute VirusTotal enrichment, auto-create Jira tickets, and route notifications via Gmail for full SOC automation.
 - **SANS SIFT Forensics Integration:** Full integration of SANS SIFT Workstation into post-incident pipeline with evidence storage on TerraMaster NAS for forensic integrity.
